@@ -1,0 +1,592 @@
+/* ==========================================================================
+   My Remember — Sistema de diseño
+   Paleta inspirada en el logo (corazón-reloj azul-turquesa) + un acento
+   dorado cálido para todo lo relacionado con el vínculo familiar.
+   Tipografía: Atkinson Hyperlegible (creada para máxima legibilidad, ideal
+   para adultos mayores) + Fraunces para titulares con calidez humana.
+   ========================================================================== */
+
+:root {
+  --azul-marino: #163B5C;
+  --azul-marino-oscuro: #0F2A42;
+  --turquesa: #2E9E93;
+  --turquesa-oscuro: #21756C;
+  --cielo-suave: #DCEEF2;
+  --dorado-calido: #E2A33B;
+  --dorado-oscuro: #B97F22;
+  --lienzo: #F5F9FA;
+  --carbon: #223238;
+  --gris-medio: #6B7C82;
+  --borde-suave: #DCE7EA;
+  --blanco: #FFFFFF;
+  --rojo-suave: #C1483D;
+  --rojo-fondo: #FBEDEB;
+
+  --sombra-suave: 0 10px 26px rgba(22, 59, 92, 0.09);
+  --radio-tarjeta: 20px;
+  --radio-boton: 14px;
+
+  --fuente-cuerpo: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fuente-display: 'Fraunces', Georgia, serif;
+}
+
+/* --------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------- */
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+html.texto-grande { font-size: 118%; }
+html.texto-muy-grande { font-size: 140%; }
+
+body {
+  font-family: var(--fuente-cuerpo);
+  background: var(--lienzo);
+  color: var(--carbon);
+  min-height: 100vh;
+  line-height: 1.55;
+}
+
+body.con-nav-inferior { padding-bottom: 96px; }
+
+h1, h2, h3, .fuente-display {
+  font-family: var(--fuente-display);
+  color: var(--azul-marino-oscuro);
+  font-weight: 600;
+}
+
+a { color: var(--turquesa-oscuro); }
+
+.texto-suave { color: var(--gris-medio); }
+.texto-ayuda { color: var(--gris-medio); font-size: 0.95rem; }
+.texto-ayuda-chico { color: var(--gris-medio); font-size: 0.85rem; margin-bottom: 0; }
+
+a:focus-visible, button:focus-visible, input:focus-visible,
+select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid var(--dorado-calido);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.contenedor-app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1.25rem 1.1rem 1.5rem;
+}
+
+.contenedor-ancho {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 2.5rem;
+}
+
+/* --------------------------------------------------------------------
+   Logo / marca
+   -------------------------------------------------------------------- */
+.logo-my-remember {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--fuente-display);
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: var(--azul-marino);
+  text-decoration: none;
+}
+.logo-my-remember .marca-icono { height: 38px; width: 38px; flex-shrink: 0; }
+.logo-my-remember .marca-my { font-weight: 500; opacity: .85; margin-right: .15em; }
+
+/* --------------------------------------------------------------------
+   Pantallas de autenticación
+   -------------------------------------------------------------------- */
+.pantalla-auth {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(46, 158, 147, 0.16), transparent 42%),
+    radial-gradient(circle at 88% 90%, rgba(22, 59, 92, 0.14), transparent 42%),
+    var(--lienzo);
+}
+
+.tarjeta-auth {
+  width: 100%;
+  max-width: 460px;
+  background: var(--blanco);
+  border-radius: 28px;
+  padding: 2.25rem 2rem;
+  box-shadow: var(--sombra-suave);
+}
+
+.tarjeta-auth .logo-my-remember { justify-content: center; width: 100%; margin-bottom: .35rem; }
+
+.pila-perfiles { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
+
+.tarjeta-perfil {
+  border: 2px solid var(--borde-suave);
+  border-radius: 22px;
+  padding: 1.4rem;
+  text-align: left;
+  width: 100%;
+  background: var(--blanco);
+  transition: border-color .15s ease, transform .12s ease;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  text-decoration: none;
+  color: inherit;
+}
+.tarjeta-perfil:hover, .tarjeta-perfil:focus-visible {
+  border-color: var(--turquesa);
+  transform: translateY(-2px);
+  color: inherit;
+}
+.tarjeta-perfil .icono-perfil {
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; flex-shrink: 0;
+}
+.tarjeta-perfil.perfil-mayor .icono-perfil { background: var(--cielo-suave); color: var(--turquesa-oscuro); }
+.tarjeta-perfil.perfil-familiar .icono-perfil { background: #FCEFDA; color: var(--dorado-oscuro); }
+.tarjeta-perfil h3 { font-size: 1.08rem; margin-bottom: .2rem; }
+.tarjeta-perfil p { margin-bottom: 0; color: var(--gris-medio); font-size: .92rem; }
+
+.enlace-vuelta { display: inline-flex; align-items: center; gap: .35rem; font-weight: 700; text-decoration: none; }
+
+/* --------------------------------------------------------------------
+   Botones de marca
+   -------------------------------------------------------------------- */
+.btn { border-radius: var(--radio-boton); font-weight: 700; }
+.btn-lg { border-radius: 16px; }
+
+.btn-mr-primario {
+  background: var(--turquesa-oscuro); border-color: var(--turquesa-oscuro); color: #fff;
+}
+.btn-mr-primario:hover, .btn-mr-primario:focus {
+  background: #195D56; border-color: #195D56; color: #fff;
+}
+.btn-mr-secundario {
+  background: var(--blanco); border: 2px solid var(--borde-suave); color: var(--azul-marino);
+}
+.btn-mr-secundario:hover, .btn-mr-secundario:focus {
+  border-color: var(--azul-marino); color: var(--azul-marino); background: var(--cielo-suave);
+}
+.btn-mr-dorado { background: var(--dorado-calido); border-color: var(--dorado-calido); color: #4A3106; }
+.btn-mr-dorado:hover { background: var(--dorado-oscuro); border-color: var(--dorado-oscuro); color: #fff; }
+.btn-mr-peligro { background: var(--blanco); border: 2px solid var(--rojo-suave); color: var(--rojo-suave); }
+.btn-mr-peligro:hover { background: var(--rojo-suave); color: #fff; }
+
+.btn-hablar {
+  border: none; background: var(--cielo-suave); color: var(--turquesa-oscuro);
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center; font-size: 1.05rem;
+}
+.btn-hablar:hover { background: var(--turquesa); color: #fff; }
+
+/* --------------------------------------------------------------------
+   Tarjetas / componentes genéricos
+   -------------------------------------------------------------------- */
+.card { border-radius: var(--radio-tarjeta); border: 1px solid var(--borde-suave); box-shadow: none; }
+.card.elevada { box-shadow: var(--sombra-suave); border: none; }
+
+.badge-mr { border-radius: 999px; padding: .4em .8em; font-weight: 700; font-size: .74rem; letter-spacing: .01em; }
+.badge-confirmada, .badge-completado { background: rgba(46,158,147,.15); color: var(--turquesa-oscuro); }
+.badge-pendiente, .badge-pospuesto { background: rgba(226,163,59,.18); color: var(--dorado-oscuro); }
+.badge-omitido, .badge-cancelada { background: rgba(193,72,61,.12); color: var(--rojo-suave); }
+.badge-ahora { background: var(--dorado-calido); color: #4A3106; }
+
+.avatar-iniciales {
+  width: 48px; height: 48px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: 1.05rem; flex-shrink: 0;
+}
+.avatar-iniciales.grande { width: 64px; height: 64px; font-size: 1.4rem; }
+
+/* --------------------------------------------------------------------
+   Encabezado del Adulto Mayor (saludo)
+   -------------------------------------------------------------------- */
+.encabezado-saludo {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 1.1rem;
+}
+.encabezado-saludo h1 { font-size: 1.5rem; margin-bottom: .1rem; }
+.encabezado-saludo .fecha-hoy { color: var(--gris-medio); font-size: .95rem; text-transform: capitalize; }
+.enlace-salir { color: var(--gris-medio); font-size: 1.35rem; }
+
+/* Mensaje de cariño "Estoy Contigo" — el momento cálido de la interfaz */
+.mensaje-carino {
+  background: linear-gradient(135deg, #FFF6E8, #FFEFD6);
+  border: 1px solid rgba(226,163,59,.35);
+  border-radius: var(--radio-tarjeta);
+  padding: 1.05rem 1.2rem;
+  display: flex; gap: .85rem; align-items: flex-start;
+  margin-bottom: 1.4rem;
+}
+.mensaje-carino .icono-corazon { color: var(--dorado-oscuro); font-size: 1.3rem; margin-top: .1rem; }
+.mensaje-carino .remitente { font-weight: 700; color: var(--azul-marino-oscuro); font-size: .85rem; margin-bottom: .15rem; }
+.mensaje-carino p { margin-bottom: 0; }
+
+/* --------------------------------------------------------------------
+   Línea de tiempo ("Mi día")
+   -------------------------------------------------------------------- */
+.linea-tiempo { position: relative; padding-left: 2.4rem; margin-top: 1.5rem; }
+.linea-tiempo::before {
+  content: ''; position: absolute; left: .78rem; top: .4rem; bottom: .4rem;
+  width: 3px; background: var(--borde-suave); border-radius: 3px;
+}
+.evento-tiempo { position: relative; margin-bottom: 1.15rem; }
+.evento-tiempo::before {
+  content: ''; position: absolute; left: -2.4rem; top: .5rem;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--blanco); border: 3px solid var(--borde-suave);
+}
+.evento-tiempo.completado::before { background: var(--turquesa); border-color: var(--turquesa); }
+.evento-tiempo.destacado::before {
+  background: var(--dorado-calido); border-color: var(--dorado-calido);
+  box-shadow: 0 0 0 5px rgba(226,163,59,.25);
+}
+.tarjeta-evento {
+  border: 1px solid var(--borde-suave); border-radius: 16px;
+  padding: .9rem 1.05rem; background: var(--blanco);
+  display: flex; align-items: center; gap: .8rem;
+}
+.tarjeta-evento.destacada { border-color: var(--dorado-calido); background: #FFFBF3; }
+.tarjeta-evento .icono-evento {
+  width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--cielo-suave); color: var(--turquesa-oscuro); font-size: 1.2rem;
+}
+.tarjeta-evento.completada .icono-evento { background: rgba(46,158,147,.18); }
+.tarjeta-evento .hora-evento { font-weight: 700; color: var(--azul-marino); min-width: 78px; }
+
+/* --------------------------------------------------------------------
+   Recordatorios (Alarmas)
+   -------------------------------------------------------------------- */
+.tarjeta-recordatorio {
+  border: 1px solid var(--borde-suave); border-radius: var(--radio-tarjeta);
+  padding: 1.1rem 1.2rem; background: var(--blanco); margin-bottom: 1rem;
+}
+.tarjeta-recordatorio.urgente { border-color: var(--dorado-calido); background: #FFFBF3; box-shadow: 0 0 0 3px rgba(226,163,59,.18); }
+.tarjeta-recordatorio.completado { opacity: .75; }
+.tarjeta-recordatorio .fila-superior { display: flex; justify-content: space-between; align-items: flex-start; gap: .6rem; margin-bottom: .5rem; }
+.tarjeta-recordatorio h3 { font-size: 1.08rem; margin-bottom: .15rem; font-family: var(--fuente-cuerpo); font-weight: 700; color: var(--carbon); }
+.tarjeta-recordatorio .acciones-recordatorio { display: flex; gap: .6rem; margin-top: .8rem; flex-wrap: wrap; }
+.tarjeta-recordatorio .acciones-recordatorio form { flex: 1; min-width: 150px; }
+.tarjeta-recordatorio .acciones-recordatorio .btn { width: 100%; }
+
+/* --------------------------------------------------------------------
+   Tabs tipo "pills" (Próximas / Pasadas)
+   -------------------------------------------------------------------- */
+.tabs-mr { display: flex; gap: .5rem; margin-bottom: 1.2rem; }
+.tabs-mr a {
+  flex: 1; text-align: center; padding: .55rem .5rem; border-radius: 999px;
+  background: var(--cielo-suave); color: var(--azul-marino); font-weight: 700;
+  text-decoration: none; font-size: .92rem;
+}
+.tabs-mr a.activo { background: var(--azul-marino); color: #fff; }
+
+.tarjeta-cita { border: 1px solid var(--borde-suave); border-radius: var(--radio-tarjeta); padding: 1.1rem 1.2rem; background: var(--blanco); margin-bottom: 1rem; }
+.tarjeta-cita .fecha-cita { color: var(--rojo-suave); font-weight: 700; font-size: .85rem; display: flex; align-items: center; gap: .35rem; margin-bottom: .3rem; }
+.tarjeta-cita h3 { font-size: 1.1rem; margin-bottom: .1rem; }
+.tarjeta-cita .lugar-cita { display: flex; align-items: flex-start; gap: .4rem; color: var(--gris-medio); font-size: .92rem; margin: .5rem 0; }
+.tarjeta-cita .acciones-cita { display: flex; gap: .6rem; margin-top: .8rem; flex-wrap: wrap; }
+.tarjeta-cita .acciones-cita > * { flex: 1; min-width: 130px; }
+
+/* --------------------------------------------------------------------
+   Mi Familia / contactos
+   -------------------------------------------------------------------- */
+.tarjeta-contacto { border: 1px solid var(--borde-suave); border-radius: var(--radio-tarjeta); padding: 1.1rem 1.2rem; background: var(--blanco); margin-bottom: 1rem; }
+.tarjeta-contacto .fila-contacto { display: flex; align-items: center; gap: .9rem; margin-bottom: .9rem; }
+.tarjeta-contacto h3 { font-size: 1.05rem; margin-bottom: 0; }
+.tarjeta-contacto .parentesco { color: var(--gris-medio); font-size: .88rem; display: flex; align-items: center; gap: .3rem; }
+.tarjeta-contacto .acciones-contacto { display: flex; gap: .6rem; }
+.tarjeta-contacto .acciones-contacto > * { flex: 1; }
+
+.burbuja-mensaje { background: var(--cielo-suave); border-radius: 16px; padding: .85rem 1rem; margin-bottom: .7rem; }
+.burbuja-mensaje .remitente-msg { font-weight: 700; font-size: .82rem; color: var(--turquesa-oscuro); margin-bottom: .15rem; }
+.burbuja-mensaje .fecha-msg { font-size: .75rem; color: var(--gris-medio); margin-top: .25rem; display: block; }
+
+/* --------------------------------------------------------------------
+   Nav inferior (experiencia del Adulto Mayor)
+   -------------------------------------------------------------------- */
+.nav-inferior {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--blanco); border-top: 1px solid var(--borde-suave);
+  display: flex; justify-content: space-around;
+  padding: .45rem 0 calc(.45rem + env(safe-area-inset-bottom));
+  z-index: 1030; box-shadow: 0 -6px 18px rgba(22,59,92,.07);
+}
+.nav-inferior .nav-item-mr {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  color: var(--gris-medio); text-decoration: none; font-size: .78rem;
+  padding: .3rem .7rem; border-radius: 12px; min-width: 64px;
+}
+.nav-inferior .nav-item-mr i { font-size: 1.4rem; }
+.nav-inferior .nav-item-mr.activo { color: var(--turquesa-oscuro); background: var(--cielo-suave); font-weight: 700; }
+
+/* --------------------------------------------------------------------
+   Navbar superior (experiencia del Familiar/Cuidador)
+   -------------------------------------------------------------------- */
+.navbar-mr { background: var(--azul-marino); padding: .8rem 0; }
+.navbar-mr .logo-my-remember { color: #fff; }
+.navbar-mr .nav-link { color: rgba(255,255,255,.78) !important; font-weight: 700; border-radius: 10px; padding: .5rem .9rem !important; }
+.navbar-mr .nav-link.active { color: var(--azul-marino) !important; background: #fff; }
+.navbar-mr .nav-link:hover { color: #fff !important; }
+
+/* --------------------------------------------------------------------
+   Panel del familiar (dashboard)
+   -------------------------------------------------------------------- */
+.tarjeta-estado {
+  border-radius: var(--radio-tarjeta); padding: 1.5rem; color: #fff;
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  margin-bottom: 1.5rem; flex-wrap: wrap;
+}
+.tarjeta-estado.tranquilo { background: linear-gradient(135deg, var(--turquesa), var(--turquesa-oscuro)); }
+.tarjeta-estado.atencion { background: linear-gradient(135deg, #A53628, #8D2C23); }
+.tarjeta-estado .estado-titulo { font-size: 1.3rem; font-family: var(--fuente-display); font-weight: 600; }
+.tarjeta-estado .estado-subtitulo { opacity: .9; font-size: .92rem; }
+
+.tarjeta-alerta {
+  border: 1.5px solid rgba(193,72,61,.35); background: var(--rojo-fondo);
+  border-radius: var(--radio-tarjeta); padding: 1.2rem; margin-bottom: 1rem;
+}
+.tarjeta-alerta .titulo-alerta { color: var(--rojo-suave); font-weight: 700; display: flex; align-items: center; gap: .5rem; margin-bottom: .5rem; }
+.tarjeta-alerta .acciones-alerta { display: flex; gap: .6rem; margin-top: .9rem; flex-wrap: wrap; }
+.tarjeta-alerta .acciones-alerta > * { flex: 1; min-width: 140px; }
+
+.fila-plan-cuidado { display: flex; align-items: center; gap: .8rem; padding: .85rem 0; border-bottom: 1px solid var(--borde-suave); }
+.fila-plan-cuidado:last-child { border-bottom: none; }
+.fila-plan-cuidado .info-plan { flex: 1; }
+.fila-plan-cuidado .info-plan h4 { font-size: 1rem; margin-bottom: .1rem; font-family: var(--fuente-cuerpo); font-weight: 700; }
+.fila-plan-cuidado .icono-plan {
+  width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--cielo-suave); color: var(--turquesa-oscuro); font-size: 1.15rem;
+}
+
+.fila-historial { display: flex; gap: .8rem; padding: .7rem 0; border-bottom: 1px solid var(--borde-suave); align-items: flex-start; }
+.fila-historial:last-child { border-bottom: none; }
+.fila-historial .punto-historial {
+  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; margin-top: .1rem;
+  display: flex; align-items: center; justify-content: center; font-size: .95rem;
+  background: var(--cielo-suave); color: var(--turquesa-oscuro);
+}
+.fila-historial .punto-historial.alerta { background: var(--rojo-fondo); color: var(--rojo-suave); }
+.fila-historial .punto-historial.mensaje { background: #FCEFDA; color: var(--dorado-oscuro); }
+.fila-historial .hora-historial { font-size: .78rem; color: var(--gris-medio); }
+
+.chip-sugerido {
+  border: 1.5px solid var(--borde-suave); background: var(--blanco); border-radius: 999px;
+  padding: .4rem .9rem; font-size: .88rem; font-weight: 700; color: var(--azul-marino);
+}
+.chip-sugerido:hover { background: var(--cielo-suave); border-color: var(--turquesa); }
+
+/* --------------------------------------------------------------------
+   Botón flotante de accesibilidad ("Modo Fácil")
+   -------------------------------------------------------------------- */
+.btn-accesibilidad {
+  position: fixed; right: 18px; bottom: 108px;
+  width: 58px; height: 58px; border-radius: 50%;
+  background: var(--azul-marino); color: #fff; border: none;
+  box-shadow: 0 10px 22px rgba(22,59,92,.35); font-size: 1.5rem;
+  z-index: 1040; display: flex; align-items: center; justify-content: center;
+}
+body.sin-nav-inferior .btn-accesibilidad { bottom: 24px; }
+
+.panel-accesibilidad { max-height: 78vh; }
+.opcion-accesibilidad { padding: 1rem 0; border-bottom: 1px solid var(--borde-suave); }
+.opcion-accesibilidad:last-child { border-bottom: none; }
+.opcion-titulo { display: flex; align-items: center; gap: .5rem; font-weight: 700; margin-bottom: .6rem; }
+
+/* --------------------------------------------------------------------
+   Formularios
+   -------------------------------------------------------------------- */
+.form-control, .form-select {
+  border-radius: 12px; border: 1.5px solid var(--borde-suave); padding: .6rem .85rem;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--turquesa); box-shadow: 0 0 0 3px rgba(46,158,147,.18);
+}
+label.form-label { font-weight: 700; font-size: .92rem; color: var(--azul-marino-oscuro); }
+
+/* --------------------------------------------------------------------
+   Flash messages
+   -------------------------------------------------------------------- */
+.contenedor-flash { position: sticky; top: 0; z-index: 1050; max-width: 640px; margin: 0 auto; padding: .75rem .9rem 0; }
+.contenedor-ancho ~ .contenedor-flash,
+.pagina-familiar .contenedor-flash { max-width: 1080px; }
+.flash-msg { border-radius: 14px; border: none; font-weight: 600; }
+
+/* --------------------------------------------------------------------
+   Página de error
+   -------------------------------------------------------------------- */
+.pantalla-error { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 2rem; }
+.pantalla-error .codigo-error { font-family: var(--fuente-display); font-size: 4rem; color: var(--turquesa); font-weight: 600; }
+
+/* --------------------------------------------------------------------
+   Alto contraste ("Modo Fácil")
+   -------------------------------------------------------------------- */
+html.alto-contraste body { background: #000000; color: #FFD400; }
+html.alto-contraste .lienzo,
+html.alto-contraste .pantalla-auth { background: #000000; }
+html.alto-contraste h1, html.alto-contraste h2, html.alto-contraste h3,
+html.alto-contraste .fuente-display { color: #FFD400; }
+html.alto-contraste a { color: #FFD400; text-decoration: underline; }
+
+html.alto-contraste .card,
+html.alto-contraste .tarjeta-auth,
+html.alto-contraste .tarjeta-perfil,
+html.alto-contraste .tarjeta-evento,
+html.alto-contraste .tarjeta-recordatorio,
+html.alto-contraste .tarjeta-cita,
+html.alto-contraste .tarjeta-contacto,
+html.alto-contraste .tarjeta-alerta,
+html.alto-contraste .mensaje-carino,
+html.alto-contraste .burbuja-mensaje,
+html.alto-contraste .offcanvas,
+html.alto-contraste .modal-content {
+  background: #000000 !important; color: #FFD400 !important; border: 1.5px solid #FFD400 !important;
+}
+html.alto-contraste .nav-inferior,
+html.alto-contraste .navbar-mr {
+  background: #000000 !important; border-color: #FFD400 !important;
+}
+html.alto-contraste .nav-inferior .nav-item-mr,
+html.alto-contraste .navbar-mr .nav-link { color: #FFD400 !important; }
+html.alto-contraste .nav-inferior .nav-item-mr.activo,
+html.alto-contraste .navbar-mr .nav-link.active { background: #FFD400 !important; color: #000000 !important; }
+
+html.alto-contraste .btn-mr-primario, html.alto-contraste .btn-mr-dorado,
+html.alto-contraste .badge-mr, html.alto-contraste .icono-evento,
+html.alto-contraste .icono-plan, html.alto-contraste .punto-historial,
+html.alto-contraste .avatar-iniciales, html.alto-contraste .btn-accesibilidad,
+html.alto-contraste .tarjeta-estado {
+  background: #FFD400 !important; color: #000000 !important; border-color: #FFD400 !important;
+}
+html.alto-contraste .btn-mr-secundario, html.alto-contraste .btn-hablar,
+html.alto-contraste .chip-sugerido, html.alto-contraste .tabs-mr a {
+  background: #000 !important; color: #FFD400 !important; border: 2px solid #FFD400 !important;
+}
+html.alto-contraste .form-control, html.alto-contraste .form-select {
+  background: #000 !important; color: #FFD400 !important; border-color: #FFD400 !important;
+}
+html.alto-contraste .linea-tiempo::before,
+html.alto-contraste .evento-tiempo::before { border-color: #FFD400 !important; background: #000 !important; }
+html.alto-contraste .texto-suave, html.alto-contraste .texto-ayuda,
+html.alto-contraste .texto-ayuda-chico, html.alto-contraste .fecha-hoy { color: #E6C34A !important; }
+
+/* --------------------------------------------------------------------
+   Responsive: en pantallas anchas, el panel del familiar respira más
+   -------------------------------------------------------------------- */
+@media (min-width: 768px) {
+  .contenedor-app { padding-top: 2rem; }
+  .tarjeta-recordatorio .acciones-recordatorio form,
+  .tarjeta-recordatorio .acciones-recordatorio .btn { flex: initial; min-width: 200px; }
+}
+
+/* Vinculación, conversación y controles accesibles. */
+:root { --gris-medio: #53686F; --dorado-oscuro: #855A16; }
+.btn, .chip-sugerido, summary, .form-control, .form-select { min-height: 44px; }
+.btn { padding: .6rem 1rem; }
+.btn-hablar { min-width: 44px; min-height: 44px; }
+summary { cursor: pointer; padding: .5rem 0; font-weight: 700; }
+summary:focus-visible { outline: 3px solid var(--dorado-calido); outline-offset: 3px; }
+summary::marker { color: var(--turquesa-oscuro); }
+.tarjeta-vinculacion { background: #fff; border: 2px solid #8AC8C0; border-radius: var(--radio-tarjeta); padding: 1.25rem; box-shadow: var(--sombra-suave); }
+.icono-vinculo { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; flex-shrink: 0; border-radius: 14px; background: var(--cielo-suave); color: var(--turquesa-oscuro); font-size: 1.45rem; }
+.codigo-familia { display: block; width: 100%; border: 1px dashed #7AB7AF; border-radius: 12px; color: var(--azul-marino); background: #F0F8F6; padding: .7rem .8rem; font-family: ui-monospace,monospace; font-size: clamp(1.2rem, 4.5vw, 1.75rem); font-weight: 700; letter-spacing: .08em; text-align: center; }
+.pasos-vinculacion li { padding: .25rem 0; }
+.mensaje-contenido { white-space: pre-wrap; overflow-wrap: anywhere; }
+.burbuja-mensaje { overflow-wrap: anywhere; }
+.burbuja-mensaje.mensaje-propio { background: #EAF5F2; border-left: 4px solid var(--turquesa); }
+.acciones-mensaje summary { font-size: .85rem; color: var(--turquesa-oscuro); }
+.acciones-mensaje .btn { font-size: .85rem; }
+.estado-vacio { border: 1px dashed #9DB8BF; border-radius: 18px; padding: 1.5rem; text-align: center; background: #fff; color: var(--gris-medio); }
+.estado-vacio > .bi { display: block; font-size: 2rem; color: var(--turquesa-oscuro); margin-bottom: .5rem; }
+.item-editable { border-bottom: 1px solid var(--borde-suave); padding: .75rem 0; }
+.item-editable:last-child { border: 0; }
+.enlace-detalle { color: var(--turquesa-oscuro); text-decoration: underline; font-size: .85rem; }
+.resumen-cuidado { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: .75rem; }
+.resumen-cuidado > div { background: #fff; border: 1px solid var(--borde-suave); border-radius: 16px; padding: 1rem; }
+.resumen-cuidado strong { display: block; color: var(--azul-marino); font-size: 1.5rem; }
+.resumen-cuidado span { display: block; font-size: .9rem; color: var(--gris-medio); }
+.pie-aplicacion { text-align: center; padding: 1rem 4.5rem 2rem; font-size: .85rem; }
+.saltar-contenido { position: fixed; left: 1rem; top: -10rem; padding: .8rem 1rem; color: #fff; background: var(--azul-marino); border-radius: 8px; z-index: 3000; }
+.saltar-contenido:focus { top: 1rem; }
+.aviso-novedades { max-width: 620px; margin: 1rem auto; padding: 1rem; border: 2px solid var(--turquesa); border-radius: 14px; background: #fff; }
+.aviso-novedades .texto-ayuda-chico { display: block; }
+.nav-inferior { gap: 0; }
+.nav-inferior .nav-item-mr { min-width: 0; flex: 1; padding: .3rem .15rem; font-size: .74rem; }
+@media (max-width: 420px) { .nav-inferior .nav-item-mr { font-size: .67rem; } .resumen-cuidado { grid-template-columns: repeat(2,minmax(0,1fr)); } .tarjeta-vinculacion { padding: 1rem; } .tarjeta-recordatorio .fila-superior { gap: .4rem; } }
+@media (max-width: 640px) { .resumen-cuidado { grid-template-columns: repeat(2,minmax(0,1fr)); } .fila-plan-cuidado { flex-wrap: wrap; } .tarjeta-auth { padding: 1.5rem; } }
+html.alto-contraste .tarjeta-vinculacion, html.alto-contraste .estado-vacio, html.alto-contraste .resumen-cuidado>div, html.alto-contraste .aviso-novedades, html.alto-contraste .codigo-familia { background: #000 !important; color: #FFD400 !important; border-color: #FFD400 !important; }
+html.alto-contraste .resumen-cuidado strong, html.alto-contraste .resumen-cuidado span, html.alto-contraste .enlace-detalle { color: #FFD400 !important; }
+.tarjeta-estado.sin_alertas { background: linear-gradient(135deg, #2D8077, #205E59); }
+.tarjeta-estado.sin_plan { background: linear-gradient(135deg, #496F87, #294E68); }
+
+/* Los textos introducidos por la familia deben caber también a 320 px. */
+h1, h2, h3, h4, p, summary, .info-plan, .remitente-msg, .titulo-alerta,
+.estado-subtitulo, .estado-titulo, .encabezado-saludo, .fecha-cita { overflow-wrap: anywhere; }
+.mensaje-carino > div, .tarjeta-evento > div, .tarjeta-recordatorio .fila-superior > div,
+.tarjeta-recordatorio .fila-superior > div > div, .fila-contacto > div,
+.fila-plan-cuidado .info-plan, .fila-historial > div { min-width: 0; }
+.mensaje-carino p { overflow-wrap: anywhere; white-space: pre-wrap; }
+.fecha-cita, .acciones-contacto { flex-wrap: wrap; }
+@media (max-width: 360px) {
+  .contenedor-app { padding-left: .75rem; padding-right: .75rem; }
+  .tarjeta-recordatorio, .tarjeta-cita, .tarjeta-contacto { padding: .9rem; }
+  .encabezado-saludo { gap: .4rem; }
+  .encabezado-saludo .enlace-salir { font-size: 1rem; padding: .5rem; }
+  .tarjeta-evento { flex-wrap: wrap; }
+  .tarjeta-recordatorio .acciones-recordatorio form { min-width: 100%; }
+  .nav-inferior .nav-item-mr { font-size: .61rem; }
+}
+html.alto-contraste label,
+html.alto-contraste label.form-label,
+html.alto-contraste summary,
+html.alto-contraste summary::marker,
+html.alto-contraste .acciones-mensaje summary,
+html.alto-contraste .tarjeta-recordatorio h3,
+html.alto-contraste .mensaje-carino .remitente,
+html.alto-contraste .tarjeta-alerta .titulo-alerta,
+html.alto-contraste .tarjeta-cita .fecha-cita,
+html.alto-contraste .burbuja-mensaje .remitente-msg,
+html.alto-contraste .burbuja-mensaje .fecha-msg,
+html.alto-contraste .fila-historial .hora-historial,
+html.alto-contraste .tarjeta-contacto .parentesco,
+html.alto-contraste .tarjeta-cita .lugar-cita,
+html.alto-contraste .enlace-salir,
+html.alto-contraste .estado-vacio > .bi { color: #FFD400 !important; }
+html.alto-contraste .btn-mr-peligro,
+html.alto-contraste .alert { color: #FFD400 !important; background: #000 !important; border: 2px solid #FFD400 !important; }
+html.alto-contraste .btn-mr-peligro:hover,
+html.alto-contraste .btn-mr-peligro:focus { color: #000 !important; background: #FFD400 !important; }
+html.alto-contraste .icono-vinculo { color: #000 !important; background: #FFD400 !important; }
+html.alto-contraste .tarjeta-recordatorio.completado { opacity: 1; }
+html.alto-contraste .btn-close { filter: invert(1); }
+html.alto-contraste .tarjeta-estado .estado-subtitulo,
+html.alto-contraste .tarjeta-estado .estado-titulo { color: #000 !important; opacity: 1; }
+
+/* Cinco indicadores diarios se distribuyen sin una tarjeta suelta en escritorio. */
+.resumen-cuidado { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+@media (max-width: 900px) and (min-width: 641px) { .resumen-cuidado { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .resumen-cuidado { grid-template-columns: repeat(2, minmax(0, 1fr)); } .resumen-cuidado > div:last-child:nth-child(odd) { grid-column: 1 / -1; } }
+
+/* Heredar el corte de palabras en todos los textos dinámicos de las tarjetas. */
+.contenedor-app, .contenedor-ancho, .mensaje-carino, .tarjeta-evento { overflow-wrap: anywhere; }
+.encabezado-saludo > div { flex: 1 1 0; min-width: 0; }
+.encabezado-saludo > form { flex: 0 0 auto; }
+.encabezado-saludo .enlace-salir { white-space: nowrap; }
+.nav-inferior .nav-item-mr span { max-width: 100%; overflow-wrap: anywhere; }
+html.alto-contraste input::placeholder,
+html.alto-contraste textarea::placeholder { color: #FFD400 !important; opacity: 1; }

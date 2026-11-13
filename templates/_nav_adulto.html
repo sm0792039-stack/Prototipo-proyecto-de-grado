@@ -1,0 +1,19 @@
+<nav class="nav-inferior" aria-label="Navegación principal">
+  <a href="{{ url_for('adulto.inicio') }}" class="nav-item-mr {{ 'activo' if request.endpoint == 'adulto.inicio' else '' }}">
+    <i class="bi bi-house-door-fill" aria-hidden="true"></i>
+    <span>Inicio</span>
+  </a>
+  <a href="{{ url_for('adulto.citas') }}" class="nav-item-mr {{ 'activo' if request.endpoint in ['adulto.citas'] else '' }}">
+    <i class="bi bi-calendar2-heart-fill" aria-hidden="true"></i>
+    <span>Citas</span>
+  </a>
+  <a href="{{ url_for('adulto.recordatorios') }}" aria-label="Mis recordatorios" class="nav-item-mr {{ 'activo' if request.endpoint == 'adulto.recordatorios' else '' }}">
+    <i class="bi bi-bell-fill" aria-hidden="true"></i>
+    <span>Alarmas</span>
+  </a>
+  <a href="{{ url_for('adulto.familia') }}" class="nav-item-mr {{ 'activo' if request.endpoint == 'adulto.familia' else '' }}">
+    <i class="bi bi-people-fill" aria-hidden="true"></i>
+    <span>Familia</span>
+  </a>
+  <a href="{{ url_for('comunidad.mensajes') }}" class="nav-item-mr {{ 'activo' if request.endpoint == 'comunidad.mensajes' else '' }}"><i class="bi bi-chat-heart-fill" aria-hidden="true"></i><span>Mensajes</span></a>
+</nav>

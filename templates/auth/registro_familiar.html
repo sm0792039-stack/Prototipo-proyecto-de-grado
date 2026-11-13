@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Crear cuenta · My Remember{% endblock %}
+{% block body_class %}sin-nav-inferior{% endblock %}
+{% block content %}
+<main class="pantalla-auth" id="contenidoPrincipal">
+  <div class="tarjeta-auth">
+    <a href="{{ url_for('auth.index') }}" class="enlace-vuelta texto-suave mb-2"><i class="bi bi-arrow-left" aria-hidden="true"></i> Volver</a>
+    <div class="logo-my-remember">
+      <img src="{{ url_for('static', filename='img/logo.svg') }}" class="marca-icono" alt="">
+      <span><span class="marca-my">My</span>Remember</span>
+    </div>
+    <h1 class="h4 mt-2">Crea tu cuenta de Familiar o Cuidador</h1>
+    <p class="texto-ayuda">Pídele a tu ser querido el código de familia que recibió al registrarse (ejemplo: FAM-7XQ2K).</p>
+
+    <form method="POST" action="{{ url_for('auth.registro_familiar') }}">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="mb-3">
+        <label for="codigo_familia" class="form-label">Código de familia</label>
+        <input type="text" class="form-control form-control-lg text-uppercase" id="codigo_familia" name="codigo_familia" maxlength="30" autocomplete="off" spellcheck="false"
+               value="{{ valores.get('codigo_familia', '') }}" placeholder="FAM-XXXXXX" required autofocus>
+      </div>
+      <div class="mb-3">
+        <label for="nombre_completo" class="form-label">Nombre completo</label>
+        <input type="text" class="form-control form-control-lg" id="nombre_completo" name="nombre_completo" minlength="2" maxlength="120" autocomplete="name"
+               value="{{ valores.get('nombre_completo', '') }}" required>
+      </div>
+      <div class="mb-3">
+        <label for="parentesco" class="form-label">¿Qué eres de tu ser querido?</label>
+        <select class="form-select form-select-lg" id="parentesco" name="parentesco">
+          <option value="Hija" {{ 'selected' if valores.get('parentesco') == 'Hija' }}>Hija</option>
+          <option value="Hijo" {{ 'selected' if valores.get('parentesco') == 'Hijo' }}>Hijo</option>
+          <option value="Cuidador/a" {{ 'selected' if valores.get('parentesco') == 'Cuidador/a' }}>Cuidador/a</option>
+          <option value="Nieto/a" {{ 'selected' if valores.get('parentesco') == 'Nieto/a' }}>Nieto/a</option>
+          <option value="Otro familiar" {{ 'selected' if valores.get('parentesco') == 'Otro familiar' }}>Otro familiar</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="correo" class="form-label">Correo electrónico</label>
+        <input type="email" class="form-control form-control-lg" id="correo" name="correo" maxlength="120" autocomplete="email"
+               value="{{ valores.get('correo', '') }}" required>
+      </div>
+      <div class="mb-3">
+        <label for="telefono" class="form-label">Teléfono</label>
+        <input type="tel" class="form-control form-control-lg" id="telefono" name="telefono" maxlength="30" autocomplete="tel"
+               value="{{ valores.get('telefono', '') }}" placeholder="+57 300 000 0000">
+      </div>
+      <div class="mb-3">
+        <label for="contrasena" class="form-label">Contraseña</label><p class="texto-ayuda-chico mb-1" id="ayudaContrasena">Usa al menos 8 caracteres.</p>
+        <input type="password" class="form-control form-control-lg" id="contrasena" aria-describedby="ayudaContrasena" name="contrasena" autocomplete="new-password" minlength="8" maxlength="128" required>
+      </div>
+      <div class="mb-3">
+        <label for="confirmar_contrasena" class="form-label">Confirmar contraseña</label>
+        <input type="password" class="form-control form-control-lg" id="confirmar_contrasena" name="confirmar_contrasena" autocomplete="new-password" minlength="8" maxlength="128" required>
+      </div>
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" id="es_contacto_emergencia" name="es_contacto_emergencia"
+               {{ 'checked' if valores.get('es_contacto_emergencia') == 'on' }}>
+        <label class="form-check-label" for="es_contacto_emergencia">Soy el contacto de emergencia principal</label>
+      </div>
+      <button type="submit" class="btn btn-mr-primario btn-lg w-100">
+        <i class="bi bi-person-check-fill" aria-hidden="true"></i> Crear mi cuenta
+      </button>
+    </form>
+    <p class="texto-ayuda-chico mt-3">Conoce <a href="{{ url_for('privacidad') }}">cómo se usan y comparten tus datos</a> antes de crear tu cuenta.</p>
+
+    <p class="text-center mt-4 mb-0">¿Ya tienes una cuenta?
+      <a href="{{ url_for('auth.login') }}" class="fw-bold">Inicia sesión</a>
+    </p>
+  </div>
+</main>
+{% endblock %}

@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-lg navbar-mr" data-bs-theme="dark">
+  <div class="container">
+    <a class="navbar-brand logo-my-remember" href="{{ url_for('familiar.panel') }}">
+      <img src="{{ url_for('static', filename='img/logo.svg') }}" class="marca-icono" alt="">
+      <span><span class="marca-my">My</span>Remember</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navFamiliar"
+            aria-controls="navFamiliar" aria-expanded="false" aria-label="Abrir menú">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navFamiliar">
+      <ul class="navbar-nav ms-auto gap-lg-1 align-items-lg-center">
+        <li class="nav-item">
+          <a class="nav-link {{ 'active' if request.endpoint == 'familiar.panel' else '' }}" href="{{ url_for('familiar.panel') }}">
+            <i class="bi bi-speedometer2" aria-hidden="true"></i> Mi panel
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ 'active' if request.endpoint == 'familiar.plan_cuidado' else '' }}" href="{{ url_for('familiar.plan_cuidado') }}">
+            <i class="bi bi-clipboard2-pulse" aria-hidden="true"></i> Plan de Cuidado
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ 'active' if request.endpoint == 'familiar.historial' else '' }}" href="{{ url_for('familiar.historial') }}">
+            <i class="bi bi-clock-history" aria-hidden="true"></i> Historial
+          </a>
+        </li>
+        <li class="nav-item"><a class="nav-link {{ 'active' if request.endpoint == 'comunidad.mensajes' else '' }}" href="{{ url_for('comunidad.mensajes') }}"><i class="bi bi-chat-heart" aria-hidden="true"></i> Mensajes</a></li>
+        <li class="nav-item ms-lg-2">
+          <form method="POST" action="{{ url_for('auth.logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="nav-link btn" type="submit"><i class="bi bi-box-arrow-right" aria-hidden="true"></i> Salir</button></form>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,23 @@
+MY REMEMBER — PROTOTIPO MEJORADO
+
+1. Lee README.md para instalar o actualizar la aplicación.
+2. Si ya tienes una base MySQL, conserva tu .env y sigue la sección de actualización.
+3. Para una prueba nueva basta Python 3.10+; se crea una base SQLite local.
+
+Inicio rápido en Windows (terminal dentro de esta carpeta):
+  py -m venv .venv
+  .venv\Scripts\python.exe -m pip install -r requirements-lock.txt
+  .venv\Scripts\python.exe app.py
+
+Abre http://localhost:5000 en el navegador.
+
+Crea primero la cuenta del adulto mayor. El código de familia queda visible
+siempre en Inicio y Familia. Crea la cuenta del cuidador en otro navegador o
+ventana privada usando ese código. Ambas cuentas comparten el plan y los mensajes.
+
+Borrar para mí oculta un mensaje solo en esa cuenta.
+El autor puede usar Borrar para todos para eliminar un mensaje del grupo.
+
+MEJORAS_Y_VALIDACION.md describe los cambios, pruebas y límites.
+No se incluyen contraseñas privadas, cuentas reales, .env ni bases de datos.
+Las notificaciones son internas: no hay push con la aplicación cerrada.

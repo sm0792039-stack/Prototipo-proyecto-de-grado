@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Bienvenido · My Remember{% endblock %}
+{% block body_class %}sin-nav-inferior{% endblock %}
+{% block content %}
+<main class="pantalla-auth" id="contenidoPrincipal">
+  <div class="tarjeta-auth text-center">
+    <div class="logo-my-remember justify-content-center">
+      <img src="{{ url_for('static', filename='img/logo.svg') }}" class="marca-icono" alt="">
+      <span><span class="marca-my">My</span>Remember</span>
+    </div>
+    <p class="texto-ayuda mt-2 mb-0">Bienvenido. Por favor, selecciona cómo utilizarás la aplicación.</p>
+
+    <div class="pila-perfiles">
+      <a href="{{ url_for('auth.registro_adulto') }}" class="tarjeta-perfil perfil-mayor">
+        <span class="icono-perfil"><i class="bi bi-person-walking" aria-hidden="true"></i></span>
+        <span>
+          <h3>Soy un Adulto Mayor</h3>
+          <p>Necesito ayuda para recordar mis tareas y rutinas diarias.</p>
+        </span>
+      </a>
+      <a href="{{ url_for('auth.registro_familiar') }}" class="tarjeta-perfil perfil-familiar">
+        <span class="icono-perfil"><i class="bi bi-people-fill" aria-hidden="true"></i></span>
+        <span>
+          <h3>Soy Familiar o Cuidador</h3>
+          <p>Quiero organizar las tareas y cuidar de un ser querido.</p>
+        </span>
+      </a>
+    </div>
+
+    <p class="mt-4 mb-0">¿Ya tienes una cuenta?
+      <a href="{{ url_for('auth.login') }}" class="fw-bold">Inicia sesión</a>
+    </p>
+  </div>
+</main>
+{% endblock %}

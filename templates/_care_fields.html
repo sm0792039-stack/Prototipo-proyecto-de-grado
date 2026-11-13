@@ -1,0 +1,21 @@
+{% macro recordatorio_fields(prefix, r=none) %}
+<div class="mb-3"><label class="form-label" for="{{ prefix }}Nombre">Nombre / medicamento</label><input class="form-control" id="{{ prefix }}Nombre" name="nombre" value="{{ r.nombre if r else '' }}" maxlength="150" placeholder="Ej: Medicamento de la mañana" required></div>
+<div class="row g-3 mb-3">
+  <div class="col-sm-6"><label class="form-label" for="{{ prefix }}Tipo">Tipo</label><select class="form-select" id="{{ prefix }}Tipo" name="tipo">{% for valor, texto in [('medicamento','Medicamento'),('actividad','Actividad'),('tarea','Tarea')] %}<option value="{{ valor }}" {{ 'selected' if r and r.tipo == valor else '' }}>{{ texto }}</option>{% endfor %}</select></div>
+  <div class="col-sm-6"><label class="form-label" for="{{ prefix }}Hora">Hora</label><input class="form-control" type="time" id="{{ prefix }}Hora" name="hora" value="{{ r.hora.strftime('%H:%M') if r else '' }}" required></div>
+</div>
+<div class="mb-3"><label class="form-label" for="{{ prefix }}Repetir">Repetir</label><select class="form-select" id="{{ prefix }}Repetir" name="repetir">{% for valor,texto in [('diario','Todos los días'),('una_vez','Una vez'),('semanal','Una vez por semana')] %}<option value="{{ valor }}" {{ 'selected' if r and r.repetir == valor else '' }}>{{ texto }}</option>{% endfor %}</select><p class="texto-ayuda-chico mt-1">Una vez: el día de creación. Semanal: el mismo día de la semana en que se creó.</p></div>
+<div class="mb-3"><label class="form-label" for="{{ prefix }}Notas">Indicaciones (opcional)</label><textarea class="form-control" id="{{ prefix }}Notas" name="notas" maxlength="255" rows="2" placeholder="Escribe únicamente las indicaciones acordadas con tu profesional de salud.">{{ r.notas or '' if r else '' }}</textarea></div>
+{% endmacro %}
+
+{% macro cita_fields(prefix, hoy, c=none) %}
+<div class="mb-3"><label class="form-label" for="{{ prefix }}Especialidad">Especialidad</label><input class="form-control" id="{{ prefix }}Especialidad" name="especialidad" value="{{ c.especialidad if c else '' }}" maxlength="100" placeholder="Ej: Medicina general" required></div>
+<div class="mb-3"><label class="form-label" for="{{ prefix }}Doctor">Profesional (opcional)</label><input class="form-control" id="{{ prefix }}Doctor" name="doctor_nombre" value="{{ c.doctor_nombre or '' if c else '' }}" maxlength="120"></div>
+<div class="row g-3 mb-3">
+  <div class="col-sm-6"><label class="form-label" for="{{ prefix }}Fecha">Fecha</label><input class="form-control" type="date" id="{{ prefix }}Fecha" name="fecha" min="{{ hoy.isoformat() if hoy else '' }}" value="{{ c.fecha.isoformat() if c else '' }}" required></div>
+  <div class="col-sm-6"><label class="form-label" for="{{ prefix }}Hora">Hora</label><input class="form-control" type="time" id="{{ prefix }}Hora" name="hora" value="{{ c.hora.strftime('%H:%M') if c else '' }}" required></div>
+</div>
+<div class="mb-3"><label class="form-label" for="{{ prefix }}Lugar">Lugar (opcional)</label><input class="form-control" id="{{ prefix }}Lugar" name="lugar_nombre" value="{{ c.lugar_nombre or '' if c else '' }}" maxlength="150"></div>
+<div class="mb-3"><label class="form-label" for="{{ prefix }}Direccion">Dirección (opcional)</label><input class="form-control" id="{{ prefix }}Direccion" name="direccion" value="{{ c.direccion or '' if c else '' }}" maxlength="255"></div>
+<div class="mb-3"><label class="form-label" for="{{ prefix }}Notas">Preparación / notas (opcional)</label><textarea class="form-control" id="{{ prefix }}Notas" name="notas" maxlength="2000" rows="2">{{ c.notas or '' if c else '' }}</textarea></div>
+{% endmacro %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Privacidad y datos · My Remember{% endblock %}
+{% block content %}
+<main class="contenedor-app" id="contenidoPrincipal">
+  <a class="enlace-vuelta mb-4" href="{{ url_for('auth.index') }}"><i class="bi bi-arrow-left" aria-hidden="true"></i> Volver</a>
+  <h1 class="h3 mb-4">Tu información y tu familia</h1>
+  <section class="card elevada p-4 mb-3"><h2 class="h5">Qué información se guarda</h2><p>My Remember guarda tu nombre, correo electrónico, teléfono si lo proporcionas, tu relación familiar y los datos del plan de cuidado: recordatorios, citas, confirmaciones, alertas y mensajes. La contraseña se almacena mediante una función de protección, sin guardar el texto original.</p></section>
+  <section class="card elevada p-4 mb-3"><h2 class="h5">Con quién se comparte</h2><p>El adulto mayor y sus familiares o cuidadores vinculados pueden ver el plan de cuidado y conversar en el mismo grupo. El código de familia permite vincular nuevas cuentas: compártelo solo con personas de confianza.</p><p class="mb-0">El adulto puede cambiar el código desde Mi Familia. El código anterior dejará de permitir nuevas vinculaciones; las cuentas ya vinculadas mantendrán su acceso.</p></section>
+  <section class="card elevada p-4 mb-3"><h2 class="h5">Borrar mensajes</h2><p><strong>Borrar para mí</strong> oculta el mensaje solo en tu cuenta. Las otras personas pueden seguir viéndolo.</p><p class="mb-0"><strong>Borrar para todos</strong> permite al remitente eliminar el mensaje de la conversación compartida. Esto no elimina copias o capturas que otra persona haya realizado.</p></section>
+  <section class="card elevada p-4 mb-3"><h2 class="h5">Alertas y acompañamiento</h2><p class="mb-0">Las alertas funcionan dentro de la aplicación mientras está abierta. Las confirmaciones registradas apoyan el acompañamiento familiar y no equivalen a una valoración médica.</p></section>
+  <section class="card elevada p-4"><h2 class="h5">Acceso y eliminación de datos</h2><p class="mb-0">Para solicitar la eliminación de tu cuenta o de tus datos, contacta a la persona responsable de administrar esta instalación de My Remember. Cierra la sesión al usar un dispositivo compartido.</p></section>
+</main>
+{% endblock %}

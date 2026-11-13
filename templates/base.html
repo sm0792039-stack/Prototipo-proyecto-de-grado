@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>{% block title %}My Remember{% endblock %}</title>
+  <meta name="description" content="My Remember: acompañamiento y recordatorios de tratamientos y citas médicas para adultos mayores, con participación familiar.">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/logo.svg') }}">
+
+  <link href="{{ url_for('static', filename='vendor/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}" {% if current_user.is_authenticated and request.endpoint in ['adulto.inicio','adulto.recordatorios','adulto.familia','familiar.panel','familiar.historial','comunidad.mensajes'] %}data-estado-url="{{ url_for('seguimiento.estado') }}" data-estado-version="{{ seguimiento_version }}"{% endif %}>
+<a class="saltar-contenido" href="#contenidoPrincipal">Ir al contenido principal</a>
+
+<div class="contenedor-flash">
+  {% with mensajes = get_flashed_messages(with_categories=true) %}
+    {% if mensajes %}
+      {% for categoria, mensaje in mensajes %}
+        <div class="alert alert-{{ categoria }} alert-dismissible fade show flash-msg" role="alert">
+          {{ mensaje }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
+
+{% block content %}{% endblock %}
+<div id="novedades" class="aviso-novedades" hidden role="status"><span>Hay novedades de tu familia.</span> <button class="btn btn-mr-primario" type="button" id="actualizarDatos">Actualizar</button><span class="texto-ayuda-chico" id="estadoActualizacion"></span></div>
+<footer class="pie-aplicacion"><a href="{{ url_for('privacidad') }}">Privacidad y uso de tus datos</a></footer>
+
+<!-- Botón flotante de accesibilidad: "Modo Fácil" -->
+<button type="button" class="btn-accesibilidad" data-bs-toggle="offcanvas" data-bs-target="#panelAccesibilidad"
+        aria-controls="panelAccesibilidad" aria-label="Abrir opciones de accesibilidad, Modo Fácil">
+  <i class="bi bi-universal-access" aria-hidden="true"></i>
+</button>
+
+<div class="offcanvas offcanvas-bottom panel-accesibilidad" tabindex="-1" id="panelAccesibilidad" aria-labelledby="panelAccesibilidadLabel">
+  <div class="offcanvas-header">
+    <h2 class="offcanvas-title h5 mb-0" id="panelAccesibilidadLabel"><i class="bi bi-universal-access" aria-hidden="true"></i> Modo Fácil</h2>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+  </div>
+  <div class="offcanvas-body">
+    <p class="texto-ayuda">Ajusta la plataforma para que sea más cómoda de leer y de usar.</p>
+
+    <div class="opcion-accesibilidad">
+      <span class="opcion-titulo"><i class="bi bi-type" aria-hidden="true"></i> Tamaño del texto</span>
+      <div class="btn-group w-100" role="group" aria-label="Tamaño del texto">
+        <button type="button" class="btn btn-mr-secundario" data-tamano="normal">Normal</button>
+        <button type="button" class="btn btn-mr-secundario" data-tamano="grande">Grande</button>
+        <button type="button" class="btn btn-mr-secundario" data-tamano="muy-grande">Muy grande</button>
+      </div>
+    </div>
+
+    <div class="opcion-accesibilidad">
+      <span class="opcion-titulo"><i class="bi bi-circle-half" aria-hidden="true"></i> Alto contraste</span>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" id="interruptorContraste">
+        <label class="form-check-label" for="interruptorContraste">Fondo negro y letras amarillas</label>
+      </div>
+    </div>
+
+    <div class="opcion-accesibilidad">
+      <span class="opcion-titulo"><i class="bi bi-volume-up-fill" aria-hidden="true"></i> Lectura en voz alta</span>
+      <p class="texto-ayuda-chico">Busca el ícono <i class="bi bi-volume-up-fill" aria-hidden="true"></i> junto a "Mi día" y tus recordatorios para escucharlos en voz alta.</p>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='vendor/bootstrap/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

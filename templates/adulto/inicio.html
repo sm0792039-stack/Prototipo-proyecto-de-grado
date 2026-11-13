@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Inicio · My Remember{% endblock %}
+{% block body_class %}con-nav-inferior{% endblock %}
+{% block content %}
+<main class="contenedor-app" id="contenidoPrincipal">
+
+  <div class="encabezado-saludo">
+    <div>
+      <h1>
+        {% if ahora.hour < 12 %}Buenos días{% elif ahora.hour < 19 %}Buenas tardes{% else %}Buenas noches{% endif %},
+        {{ current_user.nombre_completo.split(' ')[0] }} <span style="color:#E2A33B;">&hearts;</span>
+      </h1>
+      <div class="fecha-hoy">{{ hoy | fecha_larga }}</div>
+    </div>
+    <form method="POST" action="{{ url_for('auth.logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="enlace-salir btn" aria-label="Cerrar sesión"><i class="bi bi-box-arrow-right" aria-hidden="true"></i> Salir</button></form>
+  </div>
+
+  {% include "_codigo_familia.html" %}
+
+  {% if ultimo_mensaje %}
+  <div class="mensaje-carino">
+    <span class="icono-corazon"><i class="bi bi-heart-fill" aria-hidden="true"></i></span>
+    <div class="flex-grow-1">
+      <div class="remitente">Mensaje de {{ ultimo_mensaje.remitente.nombre_completo }}</div>
+      <p>{{ ultimo_mensaje.contenido }}</p>
+      <a href="{{ url_for('comunidad.mensajes') }}">Responder y ver mensajes</a>
+    </div>
+    <button type="button" class="btn-hablar" data-texto="Mensaje de tu familia: {{ ultimo_mensaje.contenido }}" aria-label="Escuchar mensaje de tu familia">
+      <i class="bi bi-volume-up-fill" aria-hidden="true"></i>
+    </button>
+  </div>
+  {% endif %}
+
+  <h2 class="h5">Lo más importante ahora</h2>
+
+  {% if destacado %}
+    <div class="tarjeta-evento destacada mb-3">
+      <span class="hora-evento">{{ destacado.hora | hora12 }}</span>
+      <span class="icono-evento"><i class="bi {{ destacado.icono }}" aria-hidden="true"></i></span>
+      <div class="flex-grow-1">
+        <strong>{{ destacado.titulo }}</strong>
+        {% if destacado.subtitulo %}<div class="texto-ayuda-chico">{{ destacado.subtitulo }}</div>{% endif %}
+      </div>
+      <button type="button" class="btn-hablar" data-texto="{{ destacado.titulo }}, a las {{ destacado.hora | hora12 }}" aria-label="Escuchar">
+        <i class="bi bi-volume-up-fill" aria-hidden="true"></i>
+      </button>
+    </div>
+    {% if destacado.tipo == 'recordatorio' and destacado.estado in ['pendiente','pospuesto'] %}
+      <div class="d-flex gap-2 mb-4 flex-wrap">
+        <form method="POST" action="{{ url_for('adulto.confirmar_recordatorio', registro_id=destacado.id) }}" class="flex-fill">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="volver" value="inicio">
+          <button type="submit" class="btn btn-mr-primario btn-lg w-100"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Ya lo hice</button>
+        </form>
+        <form method="POST" action="{{ url_for('adulto.posponer_recordatorio', registro_id=destacado.id) }}" class="flex-fill">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="volver" value="inicio">
+          <button type="submit" class="btn btn-mr-secundario btn-lg w-100"><i class="bi bi-clock" aria-hidden="true"></i> Recordarme después</button>
+        </form>
+      </div>
+    {% else %}
+      <div class="mb-4">
+        <a href="{{ url_for('adulto.citas') }}" class="btn btn-mr-secundario w-100"><i class="bi bi-calendar2-heart" aria-hidden="true"></i> Ver detalles de la cita</a>
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="tarjeta-evento mb-4">
+      <span class="icono-evento"><i class="bi bi-emoji-smile" aria-hidden="true"></i></span>
+      <div><strong>No tienes recordatorios pendientes en este momento.</strong></div>
+    </div>
+  {% endif %}
+
+  <h2 class="h5 d-flex align-items-center gap-2">
+    Tu día
+    {% if eventos %}
+    <button type="button" class="btn-hablar" style="width:34px;height:34px;font-size:.85rem;"
+            data-texto="Tu día: {% for e in eventos %}{{ e.titulo }} a las {{ e.hora | hora12 }}. {% endfor %}"
+            aria-label="Escuchar todo mi día">
+      <i class="bi bi-volume-up-fill" aria-hidden="true"></i>
+    </button>
+    {% endif %}
+  </h2>
+
+  {% if eventos %}
+    <div class="linea-tiempo">
+      {% for evento in eventos %}
+        <div class="evento-tiempo {{ 'completado' if evento.estado == 'completado' else '' }} {{ 'destacado' if destacado and evento.id == destacado.id and evento.tipo == destacado.tipo else '' }}">
+          <div class="tarjeta-evento {{ 'completada' if evento.estado == 'completado' else '' }}">
+            <span class="hora-evento">{{ evento.hora | hora12 }}</span>
+            <span class="icono-evento"><i class="bi {{ evento.icono }}" aria-hidden="true"></i></span>
+            <div class="flex-grow-1">{{ evento.titulo }}</div>
+            {% if evento.estado == 'omitido' %}<span class="badge-mr badge-omitido">No realizado</span>{% endif %}
+            {% if evento.estado == 'completado' %}
+              <i class="bi bi-check-circle-fill" style="color:var(--turquesa-oscuro);" aria-hidden="true"></i>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="texto-suave">Todavía no tienes actividades programadas para hoy.</p>
+  {% endif %}
+
+</main>
+
+{% include "_nav_adulto.html" %}
+{% endblock %}

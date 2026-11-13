@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Seguimiento · My Remember{% endblock %}
+{% block body_class %}sin-nav-inferior{% endblock %}
+{% block content %}
+{% include "_nav_familiar.html" %}
+
+<main class="contenedor-ancho" id="contenidoPrincipal">
+  <h1 class="h4 mb-3">Seguimiento de tu familiar</h1>
+
+  <div class="tarjeta-estado {{ estado_general }}">
+    <div>
+      <div class="estado-subtitulo">Seguimiento de {{ adulto.nombre_completo.split(' ')[0] if adulto else 'tu familiar' }}</div>
+      <div class="estado-titulo">{{ 'Hay recordatorios sin confirmar' if estado_general == 'atencion' else ('Sin recordatorios para hoy' if estado_general == 'sin_plan' else 'Sin alertas de recordatorios') }}</div>
+      <div class="estado-subtitulo mt-1"><i class="bi bi-clock-history" aria-hidden="true"></i> Última confirmación: {{ texto_ultima_confirmacion }}</div>
+    </div>
+    <i class="bi {{ 'bi-exclamation-triangle-fill' if estado_general == 'atencion' else 'bi-clipboard-check' }}" style="font-size:2.5rem; opacity:.85;" aria-hidden="true"></i>
+  </div>
+
+  <p class="texto-ayuda-chico mb-3">Este panel muestra las confirmaciones registradas en la plataforma. No determina el estado de salud de tu familiar. Las alertas se actualizan mientras la aplicación está abierta.</p>
+  {% if resumen is defined %}<div class="resumen-cuidado mb-4" aria-label="Resumen de recordatorios de hoy"><div><strong>{{ resumen.completados }} / {{ resumen.total }}</strong><span>Confirmados hoy</span></div><div><strong>{{ resumen.pendientes }}</strong><span>Pendientes</span></div><div><strong>{{ resumen.pospuestos }}</strong><span>Pospuestos</span></div><div><strong>{{ resumen.omitidos }}</strong><span>No realizados</span></div><div><strong>{{ resumen.porcentaje }}%</strong><span>Confirmación del día</span></div></div>{% endif %}
+  <div class="d-flex flex-wrap gap-2 mb-4"><a class="btn btn-mr-secundario" href="{{ url_for('comunidad.mensajes') }}"><i class="bi bi-chat-heart" aria-hidden="true"></i> Conversar</a><a class="btn btn-mr-secundario" href="{{ url_for('familiar.plan_cuidado') }}"><i class="bi bi-calendar-plus" aria-hidden="true"></i> Organizar el plan</a></div>
+  {% if alertas %}
+    <h2 class="h5">Atención Requerida</h2>
+    {% for alerta in alertas %}
+      <div class="tarjeta-alerta">
+        <div class="titulo-alerta">
+          <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+          {{ adulto.nombre_completo if adulto else 'Tu familiar' }} no ha confirmado
+        </div>
+        <p class="mb-0">{{ alerta.mensaje }}</p>
+        <div class="acciones-alerta">
+          {% if adulto and adulto.telefono %}
+            <a href="tel:{{ adulto.telefono }}" class="btn btn-mr-primario"><i class="bi bi-telephone-fill" aria-hidden="true"></i> Llamar ahora</a>
+          {% endif %}
+          <form method="POST" action="{{ url_for('familiar.enviar_recordatorio_push', alerta_id=alerta.id) }}">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-mr-dorado w-100"><i class="bi bi-send-fill" aria-hidden="true"></i> Resaltar recordatorio</button>
+          </form>
+          <form method="POST" action="{{ url_for('familiar.descartar_alerta', alerta_id=alerta.id) }}">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-mr-secundario w-100"><i class="bi bi-x-circle" aria-hidden="true"></i> Descartar alerta</button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <h2 class="h5 mt-4">Actividad de Hoy</h2>
+  <div class="card elevada p-3">
+    {% if not eventos %}
+      <p class="texto-suave mb-0">Todavía no hay actividades programadas para hoy.</p>
+    {% endif %}
+    {% for evento in eventos %}
+      <div class="fila-plan-cuidado">
+        <span class="icono-plan"><i class="bi {{ evento.icono }}" aria-hidden="true"></i></span>
+        <div class="info-plan">
+          <h4>{{ evento.titulo }}</h4>
+          <div class="texto-ayuda-chico">{{ evento.hora | hora12 }}</div>
+        </div>
+        {% if evento.estado == 'completado' %}
+          <span class="badge-mr badge-completado">Completado</span>
+        {% elif evento.estado == 'omitido' %}
+          <span class="badge-mr badge-omitido">No realizado</span>
+        {% elif evento.tipo == 'cita' %}
+          <span class="badge-mr badge-{{ evento.estado }}">{{ evento.estado|capitalize }}</span>
+        {% elif evento.estado == 'pospuesto' %}
+          <span class="badge-mr badge-pospuesto">Pospuesto</span>
+        {% else %}
+          <span class="badge-mr badge-pendiente">Pendiente</span>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if ultima_actualizacion is defined %}<p class="texto-ayuda-chico mt-3">Última actualización: {{ ultima_actualizacion.time() | hora12 }} · hora de Bogotá.</p>{% endif %}
+</main>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from "_care_fields.html" import cita_fields %}
+{% block title %}Mis citas · My Remember{% endblock %}
+{% block body_class %}con-nav-inferior{% endblock %}
+{% block content %}
+<main class="contenedor-app" id="contenidoPrincipal">
+  <div class="d-flex align-items-center justify-content-between gap-2 mb-3"><h1 class="h4 mb-0">Mis citas</h1><a class="btn btn-mr-secundario" href="#nuevaCita"><i class="bi bi-plus-lg" aria-hidden="true"></i> Agregar</a></div>
+  <div class="tabs-mr"><a href="{{ url_for('adulto.citas',tab='proximas') }}" class="{{ 'activo' if tab=='proximas' }}">Próximas</a><a href="{{ url_for('adulto.citas',tab='pasadas') }}" class="{{ 'activo' if tab=='pasadas' }}">Pasadas y canceladas</a></div>
+  {% for c in citas %}<article class="tarjeta-cita"><div class="fecha-cita"><i class="bi bi-calendar-event" aria-hidden="true"></i>{{ 'Mañana' if c.fecha==manana else c.fecha|fecha_corta }} · {{ c.hora|hora12 }}<span class="badge-mr badge-{{ c.estado }} ms-auto">{{ c.estado|capitalize }}</span></div><h2 class="h5">{{ c.especialidad }}</h2>{% if c.doctor_nombre %}<p class="texto-suave mb-1">{{ c.doctor_nombre }}</p>{% endif %}{% if c.lugar_nombre or c.direccion %}<p class="lugar-cita"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i><span>{{ c.lugar_nombre or '' }}{% if c.lugar_nombre and c.direccion %}, {% endif %}{{ c.direccion or '' }}</span></p>{% endif %}{% if c.notas %}<p class="mensaje-contenido">{{ c.notas }}</p>{% endif %}
+    {% if c.direccion %}<a class="btn btn-mr-secundario mb-2" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&query={{ ((c.lugar_nombre or '')~' '~c.direccion)|urlencode }}"><i class="bi bi-map" aria-hidden="true"></i> Ver mapa</a>{% endif %}
+    {% if tab=='proximas' %}<details class="mt-2"><summary>Editar o cancelar cita</summary><form method="POST" class="mt-3" action="{{ url_for('adulto.editar_cita',cita_id=c.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{{ cita_fields('editarCita'~c.id,hoy,c) }}<button class="btn btn-mr-primario" type="submit">Guardar cambios</button></form><form method="POST" class="mt-2" action="{{ url_for('adulto.eliminar_cita',cita_id=c.id) }}" data-confirm="¿Cancelar esta cita en tu plan de cuidado? Recuerda informar también al centro médico."><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-mr-peligro" type="submit">Cancelar cita</button></form></details>{% endif %}
+  </article>{% else %}<div class="estado-vacio mb-4"><i class="bi bi-calendar-heart" aria-hidden="true"></i><p class="mb-0">{{ 'No tienes citas pasadas registradas.' if tab=='pasadas' else 'No tienes citas próximas programadas.' }}</p></div>{% endfor %}
+  <section class="card elevada p-3 mt-4" id="nuevaCita"><h2 class="h5">Agregar cita médica</h2><form method="POST" action="{{ url_for('adulto.nueva_cita') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{{ cita_fields('nuevaCita',hoy) }}<button class="btn btn-mr-primario w-100" type="submit">Guardar cita</button></form></section>
+</main>
+{% include "_nav_adulto.html" %}
+{% endblock %}

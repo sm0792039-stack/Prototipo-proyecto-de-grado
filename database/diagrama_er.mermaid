@@ -1,0 +1,103 @@
+erDiagram
+    FAMILIAS ||--o{ USUARIOS : "agrupa"
+    FAMILIAS ||--o{ RECORDATORIOS : "tiene"
+    FAMILIAS ||--o{ CITAS : "tiene"
+    FAMILIAS ||--o{ MENSAJES : "tiene"
+    FAMILIAS ||--o{ ACTIVIDAD_HISTORIAL : "tiene"
+    FAMILIAS ||--o{ ALERTAS : "tiene"
+
+    USUARIOS ||--o{ RECORDATORIOS : "crea (opcional)"
+    USUARIOS ||--o{ CITAS : "crea (opcional)"
+    USUARIOS ||--o{ MENSAJES : "envía"
+    USUARIOS ||--o{ MENSAJES_OCULTOS : "oculta para sí"
+    MENSAJES ||--o{ MENSAJES_OCULTOS : "visibilidad individual"
+
+    RECORDATORIOS ||--o{ REGISTROS_RECORDATORIO : "genera una fila por día"
+    REGISTROS_RECORDATORIO ||--o{ ALERTAS : "puede generar"
+
+    FAMILIAS {
+        int id PK
+        varchar codigo_familia UK
+        datetime fecha_creacion
+    }
+
+    USUARIOS {
+        int id PK
+        varchar nombre_completo
+        varchar correo UK
+        varchar contrasena_hash
+        enum rol "adulto_mayor | familiar"
+        varchar parentesco
+        varchar telefono
+        boolean es_contacto_emergencia
+        int familia_id FK
+    }
+
+    RECORDATORIOS {
+        int id PK
+        int familia_id FK
+        int adulto_mayor_id FK
+        varchar nombre
+        enum tipo "medicamento | actividad | tarea"
+        time hora
+        enum repetir "una_vez | diario | semanal"
+        varchar notas
+        boolean activo
+        int creado_por_id FK
+    }
+
+    REGISTROS_RECORDATORIO {
+        int id PK
+        int recordatorio_id FK
+        date fecha
+        time hora_programada
+        enum estado "pendiente | completado | pospuesto | omitido"
+        datetime hora_confirmacion
+        boolean alerta_descartada
+        boolean urgente
+    }
+
+    CITAS {
+        int id PK
+        int familia_id FK
+        int adulto_mayor_id FK
+        varchar especialidad
+        varchar doctor_nombre
+        date fecha
+        time hora
+        varchar lugar_nombre
+        varchar direccion
+        enum estado "confirmada | pendiente | cancelada"
+        int creado_por_id FK
+    }
+
+    MENSAJES {
+        int id PK
+        int familia_id FK
+        int remitente_id FK
+        varchar contenido
+        datetime fecha_envio
+    }
+
+    MENSAJES_OCULTOS {
+        int mensaje_id PK, FK
+        int usuario_id PK, FK
+        datetime fecha_ocultacion
+    }
+
+    ACTIVIDAD_HISTORIAL {
+        int id PK
+        int familia_id FK
+        varchar descripcion
+        enum tipo "completado | omitido | pospuesto | programado | mensaje | cita | alerta"
+        datetime fecha_hora
+    }
+
+    ALERTAS {
+        int id PK
+        int familia_id FK
+        int registro_id FK
+        varchar mensaje
+        enum estado "activa | descartada"
+        datetime fecha_creacion
+    }

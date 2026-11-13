@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Mi Familia · My Remember{% endblock %}
+{% block body_class %}con-nav-inferior{% endblock %}
+{% block content %}
+<main class="contenedor-app" id="contenidoPrincipal">
+  <h1 class="h4 mb-3">Mi Familia</h1>
+
+  {% include "_codigo_familia.html" %}
+  <h2 class="h5">Personas que te acompañan</h2>
+  {% if not contactos %}<p class="texto-suave">Todavía no hay familiares vinculados. Comparte tu código para empezar.</p>{% endif %}
+
+  {% for contacto in contactos %}
+    <div class="tarjeta-contacto">
+      <div class="fila-contacto">
+        <span class="avatar-iniciales grande" style="background: {{ contacto.avatar_color or '#2E9E93' }};">
+          {{ contacto.avatar_inicial or contacto.nombre_completo[0] }}
+        </span>
+        <div class="flex-grow-1">
+          <h3>{{ contacto.nombre_completo }}</h3>
+          <div class="parentesco">
+            <i class="bi bi-person-heart" aria-hidden="true"></i> {{ contacto.parentesco or 'Familiar' }}
+          </div>
+          {% if contacto.es_contacto_emergencia %}
+            <span class="badge-mr badge-pendiente mt-1 d-inline-block"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i> Contacto de emergencia</span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="acciones-contacto">
+        {% if contacto.telefono %}
+          <a href="tel:{{ contacto.telefono }}" class="btn btn-mr-primario"><i class="bi bi-telephone-fill" aria-hidden="true"></i> Llamar</a>
+        {% endif %}
+        <a href="{{ url_for('comunidad.mensajes') }}" class="btn btn-mr-secundario"><i class="bi bi-chat-heart-fill" aria-hidden="true"></i> Ver mensajes</a>
+      </div>
+    </div>
+  {% endfor %}
+
+  <section class="card elevada p-3 mt-4"><h2 class="h5">Conversa con tu familia</h2><p>Envía mensajes, escucha sus respuestas y mantente cerca de quienes te acompañan.</p><a class="btn btn-mr-primario" href="{{ url_for('comunidad.mensajes') }}"><i class="bi bi-chat-heart" aria-hidden="true"></i> Abrir mensajes</a></section>
+</main>
+
+{% include "_nav_adulto.html" %}
+{% endblock %}

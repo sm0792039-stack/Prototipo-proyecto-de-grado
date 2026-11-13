@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Historial · My Remember{% endblock %}
+{% block body_class %}sin-nav-inferior{% endblock %}
+{% block content %}
+{% include "_nav_familiar.html" %}
+<main class="contenedor-ancho" id="contenidoPrincipal">
+  <div class="d-flex flex-wrap justify-content-between gap-2 mb-3"><div><h1 class="h4 mb-1">Historial de cuidado</h1><p class="texto-ayuda mb-0">Consulta las acciones registradas y los cambios en el plan.</p></div><a class="btn btn-mr-secundario align-self-start" href="{{ url_for('comunidad.mensajes') }}"><i class="bi bi-chat-heart" aria-hidden="true"></i> Abrir mensajes</a></div>
+  <form method="GET" class="card elevada p-3 mb-4"><div class="row g-3 align-items-end"><div class="col-sm-3"><label class="form-label" for="desde">Desde</label><input class="form-control" type="date" name="desde" id="desde" value="{{ filtros.desde or '' }}"></div><div class="col-sm-3"><label class="form-label" for="hasta">Hasta</label><input class="form-control" type="date" name="hasta" id="hasta" value="{{ filtros.hasta or '' }}"></div><div class="col-sm-3"><label class="form-label" for="tipo">Actividad</label><select class="form-select" name="tipo" id="tipo"><option value="">Todas</option>{% for t in tipos %}<option value="{{ t }}" {{ 'selected' if filtros.tipo==t else '' }}>{{ t|capitalize }}</option>{% endfor %}</select></div><div class="col-sm-3 d-flex gap-2"><button class="btn btn-mr-primario" type="submit">Filtrar</button><a class="btn btn-mr-secundario" href="{{ url_for('familiar.historial') }}">Limpiar</a></div></div></form>
+  <section class="card elevada p-3"><h2 class="h5">Actividad registrada</h2>{% for a in actividades %}<div class="fila-historial"><span class="punto-historial {{ 'alerta' if a.tipo=='alerta' else ('mensaje' if a.tipo=='mensaje' else '') }}"><i class="bi {{ a.icono() }}" aria-hidden="true"></i></span><div class="flex-grow-1"><div>{{ a.descripcion }}</div><time class="hora-historial" datetime="{{ a.fecha_hora.isoformat() }}Z">{{ a.fecha_hora|fecha_hora_local }}</time></div></div>{% else %}<p class="texto-suave mb-0">No hay actividades para los filtros seleccionados.</p>{% endfor %}</section>
+</main>
+{% endblock %}
